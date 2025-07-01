@@ -5,6 +5,8 @@ SECRET_KEY = "replace-this"
 DEBUG = True
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = 'resumes.User'
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -13,6 +15,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    'drf_spectacular',
     "resumes",
 ]
 
@@ -43,9 +46,21 @@ TEMPLATES = [{
 WSGI_APPLICATION = "hr_platform.wsgi.application"
 
 REST_FRAMEWORK = {
-    'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework.renderers.JSONRenderer',
-    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'HR Platform API',
+    'DESCRIPTION': 'API для управления резюме',
+    'VERSION': '1.0.0',
 }
 
 DATABASES = {
